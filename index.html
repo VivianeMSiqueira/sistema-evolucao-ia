@@ -1,450 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IA RPG v9 — Último Nível MESMO</title>
-<style>
-:root{
-  --bg:#0b0e14; --bg2:#0f172a; --card:#111827; --soft:#1f2937; --muted:#9ca3af; --text:#e5e7eb;
-  --accent:#8b5cf6; --accent2:#22d3ee; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
-}
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);color:var(--text);font-family:Inter,Arial,sans-serif}
-header{padding:24px 16px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;backdrop-filter:blur(8px);background:rgba(11,14,20,.78);z-index:2}
-.container{max-width:1180px;margin:auto;padding:16px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-.card{background:var(--card);padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);margin-bottom:16px}
-h1,h2,h3{margin:0 0 10px}
-.muted{color:var(--muted)}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.btn,button,label.btn{
-  display:inline-block;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
-  background:linear-gradient(135deg,rgba(139,92,246,.24),rgba(34,211,238,.14));color:var(--text);text-decoration:none;cursor:pointer
-}
-.btn.secondary, button.secondary{background:transparent}
-.kpi{flex:1;min-width:150px;background:#0f172a;border:1px solid rgba(255,255,255,.08);padding:12px;border-radius:12px}
-.progress{height:12px;background:#0f172a;border-radius:999px;overflow:hidden}
-.bar{height:12px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
-.quest{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.quest:last-child{border-bottom:0}
-.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:var(--soft);font-size:12px;color:var(--muted)}
-textarea{width:100%;min-height:90px;background:#0f172a;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
-.timeline-item{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.timeline-item:last-child{border-bottom:0}
-.alert{padding:12px;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.28)}
-.good{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.28)}
-.small{font-size:12px}
-@media (max-width: 900px){.grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IA RPG — Sistema de Evolução em IA</title>
+  <meta name="theme-color" content="#8b5cf6">
+  <meta name="description" content="Sistema de evolução pessoal em IA com mentor adaptativo, progresso, projetos e plano automático.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="container">
-    <h1>IA RPG v9 — Último Nível MESMO</h1>
-    <div class="muted">Agora o sistema lê seu ritmo, detecta recaídas sem te punir, sugere a próxima ação e te ajuda a voltar com dignidade 😈💜</div>
+  <header>
+    <div class="container">
+      <h1>IA RPG — Sistema de Evolução em IA</h1>
+      <div class="muted">Modo PWA leve: instalável, organizado e pronto para crescer 😈💜</div>
+    </div>
+  </header>
+
+  <div class="container grid">
+    <main>
+      <section class="card">
+        <h2>🔗 Links Rápidos</h2>
+        <div class="row" id="quickLinks"></div>
+      </section>
+
+      <section class="card">
+        <h2>📊 Painel de Evolução</h2>
+        <div class="row">
+          <div class="kpi"><div class="muted small">Nível</div><div id="levelText" class="big">1</div></div>
+          <div class="kpi"><div class="muted small">XP total</div><div id="xpText" class="big">0</div></div>
+          <div class="kpi"><div class="muted small">Energia da build</div><div id="buildText" class="big">🌱</div></div>
+        </div>
+        <div class="progress-block">
+          <div class="muted">XP para o próximo nível</div>
+          <div class="progress"><div id="xpBar" class="bar"></div></div>
+        </div>
+        <div class="progress-block">
+          <div class="muted">Progresso global</div>
+          <div class="progress"><div id="globalBar" class="bar"></div></div>
+        </div>
+        <div id="dashboardLine" class="muted top-gap">Calculando seu caos produtivo...</div>
+      </section>
+
+      <section class="card">
+        <h2>🧱 Base</h2>
+        <div id="baseBox"></div>
+      </section>
+
+      <section class="card">
+        <h2>🤖 IA Generativa</h2>
+        <div id="genBox"></div>
+      </section>
+
+      <section class="card">
+        <h2>🛠 Projetos</h2>
+        <div id="projBox"></div>
+      </section>
+
+      <section class="card">
+        <h2>📝 Caderno da Cientista Maluca</h2>
+        <textarea id="notes" placeholder="Ex.: embeddings ainda parecem telepatia vetorial com marketing."></textarea>
+      </section>
+    </main>
+
+    <aside>
+      <section class="card">
+        <h2>🎯 Mentor Adaptativo</h2>
+        <div id="mentorBox" class="alert">
+          <div id="mentorTitle" class="strong">Lendo sua build...</div>
+          <div id="mentorText" class="muted top-gap">Calibrando sarcasmo pedagógico...</div>
+        </div>
+        <div class="row top-gap">
+          <button id="returnBtn" type="button">🌱 Voltei hoje (+15 XP)</button>
+          <button id="softDayBtn" class="secondary" type="button">💜 Dia difícil (+5 XP)</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>📅 Próxima Missão Inteligente</h2>
+        <div id="nextMission" class="strong bottom-gap">Calculando...</div>
+        <div id="weekPlan" class="muted"></div>
+      </section>
+
+      <section class="card">
+        <h2>📈 Leitura do seu padrão</h2>
+        <div class="row">
+          <div class="badge" id="lastSeenBadge">Última atividade: —</div>
+          <div class="badge" id="returnRateBadge">Taxa de retorno: —</div>
+          <div class="badge" id="consistencyBadge">Consistência: —</div>
+        </div>
+        <div id="patternInsight" class="muted top-gap">Observando seus ciclos...</div>
+      </section>
+
+      <section class="card">
+        <h2>📜 Histórico recente</h2>
+        <div id="timeline"></div>
+      </section>
+
+      <section class="card">
+        <h2>💾 Backup</h2>
+        <div class="row">
+          <button onclick="exportState()">Exportar JSON</button>
+          <label class="btn secondary" for="importFile">Importar JSON</label>
+          <input id="importFile" type="file" accept="application/json" hidden onchange="importState(event)">
+          <button class="secondary" onclick="resetAll()">Resetar tudo</button>
+        </div>
+        <div class="muted small top-gap">Sem perda de XP. Nunca. Esse sistema não foi feito pra te humilhar.</div>
+      </section>
+
+      <section class="card">
+        <h2>📲 Instalação</h2>
+        <div class="muted">No celular, abra o menu do navegador e use “Adicionar à tela inicial”. No desktop, alguns navegadores mostram um ícone de instalar na barra.</div>
+      </section>
+    </aside>
   </div>
-</header>
 
-<div class="container grid">
-  <div>
-    <div class="card">
-      <h2>🔗 Links Rápidos</h2>
-      <div class="row">
-        <a class="btn" href="https://cs50.harvard.edu/x/" target="_blank" rel="noopener">CS50x</a>
-        <a class="btn" href="https://cs50.harvard.edu/ai/" target="_blank" rel="noopener">CS50 AI</a>
-        <a class="btn" href="https://www.youtube.com/results?search_query=CS221+Stanford" target="_blank" rel="noopener">CS221</a>
-        <a class="btn" href="https://www.youtube.com/results?search_query=CS229+Andrew+Ng" target="_blank" rel="noopener">CS229</a>
-        <a class="btn" href="https://www.youtube.com/results?search_query=CS230+Deep+Learning+Andrew+Ng" target="_blank" rel="noopener">CS230</a>
-        <a class="btn secondary" href="https://www.udemy.com/course/formacao-engenheiro-de-ia-generativa-ia-na-pratica/" target="_blank" rel="noopener">Udemy GenAI</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>📊 Painel de Evolução</h2>
-      <div class="row">
-        <div class="kpi"><div class="muted small">Nível</div><div id="levelText" style="font-size:28px;font-weight:700">1</div></div>
-        <div class="kpi"><div class="muted small">XP total</div><div id="xpText" style="font-size:28px;font-weight:700">0</div></div>
-        <div class="kpi"><div class="muted small">Energia da build</div><div id="buildText" style="font-size:28px;font-weight:700">🌱</div></div>
-      </div>
-      <div style="margin-top:12px">
-        <div class="muted">XP para o próximo nível</div>
-        <div class="progress"><div id="xpBar" class="bar"></div></div>
-      </div>
-      <div style="margin-top:12px">
-        <div class="muted">Progresso global</div>
-        <div class="progress"><div id="globalBar" class="bar"></div></div>
-      </div>
-      <div id="dashboardLine" class="muted" style="margin-top:10px">Calculando seu caos produtivo...</div>
-    </div>
-
-    <div class="card">
-      <h2>🧱 Base</h2>
-      <div id="baseBox"></div>
-    </div>
-
-    <div class="card">
-      <h2>🤖 IA Generativa</h2>
-      <div id="genBox"></div>
-    </div>
-
-    <div class="card">
-      <h2>🛠 Projetos</h2>
-      <div id="projBox"></div>
-    </div>
-
-    <div class="card">
-      <h2>📝 Caderno da Cientista Maluca</h2>
-      <textarea id="notes" placeholder="Ex.: embeddings ainda parecem telepatia vetorial com marketing."></textarea>
-    </div>
-  </div>
-
-  <div>
-    <div class="card">
-      <h2>🎯 Mentor Adaptativo</h2>
-      <div id="mentorBox" class="alert">
-        <div id="mentorTitle" style="font-weight:700">Lendo sua build...</div>
-        <div id="mentorText" class="muted" style="margin-top:8px">Calibrando sarcasmo pedagógico...</div>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <button id="returnBtn" type="button">🌱 Voltei hoje (+15 XP)</button>
-        <button id="softDayBtn" class="secondary" type="button">💜 Dia difícil (+5 XP)</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>📅 Próxima Missão Inteligente</h2>
-      <div id="nextMission" style="font-weight:700;margin-bottom:8px">Calculando...</div>
-      <div id="weekPlan" class="muted"></div>
-    </div>
-
-    <div class="card">
-      <h2>📈 Leitura do seu padrão</h2>
-      <div class="row">
-        <div class="badge" id="lastSeenBadge">Última atividade: —</div>
-        <div class="badge" id="returnRateBadge">Taxa de retorno: —</div>
-        <div class="badge" id="consistencyBadge">Consistência: —</div>
-      </div>
-      <div id="patternInsight" class="muted" style="margin-top:10px">Observando seus ciclos...</div>
-    </div>
-
-    <div class="card">
-      <h2>📜 Histórico recente</h2>
-      <div id="timeline"></div>
-    </div>
-
-    <div class="card">
-      <h2>💾 Backup</h2>
-      <div class="row">
-        <button onclick="exportState()">Exportar JSON</button>
-        <label class="btn secondary" for="importFile">Importar JSON</label>
-        <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importState(event)">
-        <button class="secondary" onclick="resetAll()">Resetar tudo</button>
-      </div>
-      <div class="muted small" style="margin-top:10px">Sem perda de XP. Nunca. Esse sistema não foi feito pra te humilhar.</div>
-    </div>
-  </div>
-</div>
-
-<script>
-const STORAGE_KEY = "ia_rpg_v9";
-const mem = window.__IA_RPG_V9_MEM__ || (window.__IA_RPG_V9_MEM__ = {});
-const DATA = {
-  base: [
-    ["IA vs ML vs Deep Learning","https://cs50.harvard.edu/ai/"],
-    ["Vetores, matrizes e gradiente","https://www.khanacademy.org/math/linear-algebra"],
-    ["Loss, overfitting e generalização","https://www.youtube.com/results?search_query=overfitting+machine+learning"],
-    ["Treinar 1 modelo simples","https://www.youtube.com/results?search_query=scikit-learn+classification+tutorial"]
-  ],
-  gen: [
-    ["Transformers em alto nível","https://www.youtube.com/results?search_query=transformers+explained"],
-    ["Embeddings","https://www.youtube.com/results?search_query=embeddings+AI"],
-    ["Mini app com IA","https://platform.openai.com/docs"],
-    ["Testar e documentar","https://www.youtube.com/results?search_query=software+testing+basics"]
-  ],
-  projects: [
-    ["Mini classificador","https://www.youtube.com/results?search_query=iris+dataset+classification+python"],
-    ["Buscador semântico","https://www.youtube.com/results?search_query=semantic+search+embeddings+tutorial"],
-    ["Chat utilitário","https://www.youtube.com/results?search_query=chatbot+app+llm+tutorial"]
-  ]
-};
-
-function storageAvailable(){
-  try{ const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }
-  catch(e){ return false; }
-}
-function loadState(){
-  try{
-    if(storageAvailable()) return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");
-    return mem[STORAGE_KEY] || {};
-  }catch(e){ return mem[STORAGE_KEY] || {}; }
-}
-function saveState(s){
-  try{
-    if(storageAvailable()) localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-    else mem[STORAGE_KEY] = s;
-  }catch(e){ mem[STORAGE_KEY] = s; }
-}
-function todayStr(){
-  const d = new Date();
-  return d.toISOString().slice(0,10);
-}
-function daysBetween(a,b){
-  const da = new Date(a+"T00:00:00");
-  const db = new Date(b+"T00:00:00");
-  return Math.round((db-da)/(1000*60*60*24));
-}
-function ensureState(){
-  const s = loadState();
-  if(!s.base) s.base = Array(DATA.base.length).fill(false);
-  if(!s.gen) s.gen = Array(DATA.gen.length).fill(false);
-  if(!s.projects) s.projects = Array(DATA.projects.length).fill(false);
-  if(typeof s.xp !== "number") s.xp = 0;
-  if(!s.notes) s.notes = "";
-  if(!s.timeline) s.timeline = [];
-  if(!s.lastActivity) s.lastActivity = null;
-  if(typeof s.returnCount !== "number") s.returnCount = 0;
-  if(typeof s.softDayCount !== "number") s.softDayCount = 0;
-  return s;
-}
-function saveAndRefresh(s){ saveState(s); refreshAll(); }
-function addTimeline(text){
-  const s = ensureState();
-  s.timeline.unshift({date:new Date().toLocaleString("pt-BR"), text});
-  s.timeline = s.timeline.slice(0,12);
-  s.lastActivity = todayStr();
-  saveState(s);
-}
-function toggleItem(group, i, checked, label){
-  const s = ensureState();
-  s[group][i] = checked;
-  if(checked){
-    s.xp += (group === "projects" ? 20 : 10);
-    addTimeline("Concluiu: " + label);
-  } else {
-    addTimeline("Desmarcou: " + label + " (sem perda de XP, porque aqui a gente não tortura ninguém)");
-  }
-  saveAndRefresh(s);
-}
-function comebackBonus(kind){
-  const s = ensureState();
-  const bonus = kind === "soft" ? 5 : 15;
-  s.xp += bonus;
-  if(kind === "soft") s.softDayCount += 1;
-  else s.returnCount += 1;
-  addTimeline(kind === "soft" ? "Dia difícil: mesmo assim voltou e marcou presença" : "Retorno heróico ao sistema");
-  saveAndRefresh(s);
-}
-function pct(arr){
-  return arr.length ? Math.round(arr.filter(Boolean).length * 100 / arr.length) : 0;
-}
-function compute(){
-  const s = ensureState();
-  const base = pct(s.base), gen = pct(s.gen), proj = pct(s.projects);
-  const totalItems = s.base.length + s.gen.length + s.projects.length;
-  const totalDone = s.base.filter(Boolean).length + s.gen.filter(Boolean).length + s.projects.filter(Boolean).length;
-  const global = totalItems ? Math.round(100 * totalDone / totalItems) : 0;
-  const level = Math.floor(s.xp/50) + 1;
-  const nextPct = (s.xp % 50) * 2;
-  return {base, gen, proj, global, level, nextPct, xp:s.xp};
-}
-function renderChecklist(dataKey, elId){
-  const s = ensureState();
-  const box = document.getElementById(elId);
-  box.innerHTML = "";
-  DATA[dataKey].forEach((item, i) => {
-    const [label, url] = item;
-    const row = document.createElement("div");
-    row.className = "quest";
-    const chk = document.createElement("input");
-    chk.type = "checkbox";
-    chk.checked = !!s[dataKey][i];
-    chk.onchange = ()=> toggleItem(dataKey, i, chk.checked, label);
-    const text = document.createElement("div");
-    text.innerHTML = `<div>${label}</div><div class="small"><a class="btn secondary" href="${url}" target="_blank" rel="noopener">📚 Abrir conteúdo</a></div>`;
-    row.appendChild(chk);
-    row.appendChild(text);
-    box.appendChild(row);
-  });
-}
-function renderDashboard(){
-  const c = compute();
-  document.getElementById("levelText").textContent = c.level;
-  document.getElementById("xpText").textContent = c.xp;
-  document.getElementById("xpBar").style.width = c.nextPct + "%";
-  document.getElementById("globalBar").style.width = c.global + "%";
-  document.getElementById("buildText").textContent =
-    c.global < 30 ? "🌱" : c.global < 60 ? "⚙️" : c.global < 85 ? "🚀" : "👑";
-  const line = document.getElementById("dashboardLine");
-  if(c.global < 30) line.textContent = "Ainda no início, mas já com uma build promissora.";
-  else if(c.global < 60) line.textContent = "Agora você já consegue causar dano real em problemas pequenos.";
-  else if(c.global < 85) line.textContent = "Sua build está perigosa. Continue antes que Stanford te note.";
-  else line.textContent = "Você já está em território de gente que constrói coisa séria.";
-}
-function renderMentor(){
-  const s = ensureState();
-  const c = compute();
-  const mentorTitle = document.getElementById("mentorTitle");
-  const mentorText = document.getElementById("mentorText");
-  const box = document.getElementById("mentorBox");
-  let gap = s.lastActivity ? daysBetween(s.lastActivity, todayStr()) : 0;
-
-  let title="", text="", cls="alert";
-  if(gap >= 5){
-    title = "💜 Reentrada gentil";
-    text = "Você ficou alguns dias fora. Tudo bem. Nada de drama barato. Hoje a meta é só reacender o motor com 1 tarefa leve.";
-    cls = "alert";
-  } else if(c.base < 50){
-    title = "🧱 Fundamento primeiro";
-    text = "Sua base ainda está pedindo atenção. Sem esqueleto não existe monstro. Fecha 1 item da base hoje.";
-  } else if(c.gen < 50){
-    title = "🤖 Hora de brincar de IA generativa";
-    text = "Você já tem chão suficiente. Agora entra em transformers, embeddings ou mini app. Sem enrolação filosófica.";
-  } else if(c.proj < 34){
-    title = "🛠 Chega de teoria perfumada";
-    text = "Você precisa de pelo menos 1 projeto prático. Projeto feio funciona melhor do que ideia linda parada.";
-    cls = "good";
-  } else if(c.global >= 85){
-    title = "👑 Modo construtora de IA";
-    text = "Agora o foco é mostrar, testar, iterar e explicar. Você já não está só estudando.";
-    cls = "good";
-  } else {
-    title = "⚙️ Consolidação inteligente";
-    text = "Misture base + generativa + projeto. O objetivo agora é virar alguém que entrega, não só alguém que entende.";
-  }
-
-  mentorTitle.textContent = title;
-  mentorText.textContent = text;
-  box.className = "alert " + (cls === "good" ? "good" : "");
-}
-function buildPlan(){
-  const s = ensureState();
-  const c = compute();
-  const gap = s.lastActivity ? daysBetween(s.lastActivity, todayStr()) : 0;
-  let mission = "";
-  let bullets = [];
-
-  if(gap >= 5){
-    mission = "Missão de retorno suave";
-    bullets = [
-      "Marcar 1 tarefa leve da Base ou clicar no botão “Voltei hoje”",
-      "Assistir 1 vídeo curto em vez de tentar compensar uma semana em 1 tarde",
-      "Anotar 1 dúvida que ficou presa"
-    ];
-  } else if(c.base < 50){
-    mission = "Missão: fortalecer a Base";
-    bullets = [
-      "Fechar 1 item da Base hoje",
-      "Abrir 1 conteúdo recomendado",
-      "Explicar o conceito em voz alta como se estivesse ensinando"
-    ];
-  } else if(c.gen < 50){
-    mission = "Missão: entrar em IA Generativa";
-    bullets = [
-      "Abrir o conteúdo de transformers ou embeddings",
-      "Escolher 1 item de IA Generativa para concluir",
-      "Anotar um uso prático que te empolgue"
-    ];
-  } else if(c.proj < 34){
-    mission = "Missão: projeto real";
-    bullets = [
-      "Escolher Mini classificador, Buscador semântico ou Chat utilitário",
-      "Definir entrada, saída e critério de sucesso",
-      "Fazer a versão mais simples possível"
-    ];
-  } else {
-    mission = "Missão: evolução profissional";
-    bullets = [
-      "Melhorar um projeto existente",
-      "Documentar decisões e limitações",
-      "Preparar algo que você conseguiria mostrar sem se esconder atrás da cadeira"
-    ];
-  }
-
-  document.getElementById("nextMission").textContent = mission;
-  document.getElementById("weekPlan").innerHTML = bullets.map((b,i)=>`<div class="quest"><span class="badge">Passo ${i+1}</span><div>${b}</div></div>`).join("");
-}
-function renderPatterns(){
-  const s = ensureState();
-  const gap = s.lastActivity ? daysBetween(s.lastActivity, todayStr()) : null;
-  document.getElementById("lastSeenBadge").textContent = "Última atividade: " + (s.lastActivity || "—");
-  document.getElementById("returnRateBadge").textContent = "Taxa de retorno: " + s.returnCount;
-  document.getElementById("consistencyBadge").textContent = "Dias difíceis honrados: " + s.softDayCount;
-
-  let insight = "";
-  if(gap === null) insight = "Você ainda não registrou atividade. O sistema está te observando como um corvo acadêmico paciente.";
-  else if(gap >= 7) insight = "Seu padrão indica pausas longas. Solução: missões curtas de retorno, nunca maratonas punitivas.";
-  else if(s.returnCount >= 3) insight = "Você já provou que sabe voltar. Isso vale mais do que uma streak perfeita de gente que desiste no mês seguinte.";
-  else insight = "Seu padrão está relativamente estável. O truque agora é manter o ritmo sem tentar bancar a heroína em 14 frentes ao mesmo tempo.";
-  document.getElementById("patternInsight").textContent = insight;
-}
-function renderTimeline(){
-  const box = document.getElementById("timeline");
-  box.innerHTML = "";
-  const s = ensureState();
-  if(!s.timeline.length){
-    box.innerHTML = '<div class="muted">Sem eventos ainda. O drama começa quando você clica em alguma coisa.</div>';
-    return;
-  }
-  s.timeline.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "timeline-item";
-    div.innerHTML = `<div style="font-weight:700">${item.text}</div><div class="muted small">${item.date}</div>`;
-    box.appendChild(div);
-  });
-}
-function initNotes(){
-  const s = ensureState();
-  const notes = document.getElementById("notes");
-  notes.value = s.notes || "";
-  notes.oninput = () => {
-    const st = ensureState();
-    st.notes = notes.value;
-    saveState(st);
-  };
-}
-function exportState(){
-  const blob = new Blob([JSON.stringify(ensureState(), null, 2)], {type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "ia_rpg_v9_backup.json";
-  a.click();
-}
-function importState(evt){
-  const file = evt.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try{
-      saveState(JSON.parse(e.target.result));
-      refreshAll();
-      alert("Importação concluída. Sua build foi ressuscitada com necromancia administrativa.");
-    }catch(err){
-      alert("JSON inválido.");
-    }
-  };
-  reader.readAsText(file);
-}
-function resetAll(){
-  if(!confirm("Resetar tudo? Sem melodrama depois.")) return;
-  if(storageAvailable()) localStorage.removeItem(STORAGE_KEY);
-  mem[STORAGE_KEY] = {};
-  refreshAll();
-}
-function refreshAll(){
-  renderChecklist("base","baseBox");
-  renderChecklist("gen","genBox");
-  renderChecklist("projects","projBox");
-  renderDashboard();
-  renderMentor();
-  buildPlan();
-  renderPatterns();
-  renderTimeline();
-  initNotes();
-}
-document.getElementById("returnBtn").onclick = ()=> comebackBonus("return");
-document.getElementById("softDayBtn").onclick = ()=> comebackBonus("soft");
-refreshAll();
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
