@@ -99,15 +99,13 @@ function ensureState(){
   if(typeof s.softDayCount !== "number") s.softDayCount = 0;
   return s;
 }
-function saveAndRefresh(s){ saveState(s); refreshAll(); }
+function saveAndRefresh(s){ saveState(s); saveToCloud(s); refreshAll(); }
 function addTimeline(text){
   const s = ensureState();
   s.timeline.unshift({date:new Date().toLocaleString("pt-BR"), text});
   s.timeline = s.timeline.slice(0,12);
   s.lastActivity = todayStr();
   saveState(s);
-  saveToCloud(s);
-  refreshAll();
 }
 function toggleItem(group, i, checked, label){
   const s = ensureState();
