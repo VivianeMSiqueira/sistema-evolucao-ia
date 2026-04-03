@@ -5,6 +5,18 @@ const supabaseKey = 'sb_publishable_kwtsN8W5EoBTJCskzPfwvQ_QN6-Y2wV'
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 const STORAGE_KEY = "ia_rpg_pwa_v1";
+const USER_ID_KEY = "ia_rpg_user_id";
+
+function getOrCreateUserId() {
+  let userId = localStorage.getItem(USER_ID_KEY);
+
+  if (!userId) {
+    userId = crypto.randomUUID();
+    localStorage.setItem(USER_ID_KEY, userId);
+  }
+
+  return userId;
+}
 const mem = window.__IA_RPG_PWA_MEM__ || (window.__IA_RPG_PWA_MEM__ = {});
 const DATA = {
   quickLinks: [
@@ -46,23 +58,27 @@ async function testConnection() {
 testConnection()
 
 async function saveToCloud(state) {
+  const userId = getOrCreateUserId();
+
+  const payload = {
+    user_id: userId,
+    base_state: state.base,
+    gen_state: state.gen,
+    projects_state: state.projects,
+    xp: state.xp,
+    notes: state.notes,
+    timeline: state.timeline,
+    updated_at: new Date().toISOString()
+  };
+
   const { data, error } = await supabase
     .from('progress')
-    .upsert({
-      user_id: 'user_teste',
-      base_state: state.base,
-      gen_state: state.gen,
-      projects_state: state.projects,
-      xp: state.xp,
-      notes: state.notes,
-      timeline: state.timeline,
-      updated_at: new Date()
-    })
+    .upsert(payload);
 
   if (error) {
-    console.log("Erro ao salvar:", error)
+    console.log("Erro ao salvar:", error);
   } else {
-    console.log("Salvo na nuvem ☁️", data)
+    console.log("Salvo na nuvem ☁️", data);
   }
 }
 function storageAvailable(){
@@ -99,7 +115,11 @@ function ensureState(){
   if(typeof s.softDayCount !== "number") s.softDayCount = 0;
   return s;
 }
-function saveAndRefresh(s){ saveState(s); saveToCloud(s); refreshAll(); }
+function saveAndRefresh(s){
+  saveState(s);
+  saveToCloud(s);
+  refreshAll();
+}
 function addTimeline(text){
   const s = ensureState();
   s.timeline.unshift({date:new Date().toLocaleString("pt-BR"), text});
