@@ -1,4 +1,9 @@
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+const supabaseUrl = 'https://hjzjogkuffbrutcyvnfs.supabase.co'
+const supabaseKey = 'sb_publishable_kwtsN8W5EoBTJCskzPfwvQ_QN6-Y2wV'
+
+const supabase = createClient(supabaseUrl, supabaseKey)
 const STORAGE_KEY = "ia_rpg_pwa_v1";
 const mem = window.__IA_RPG_PWA_MEM__ || (window.__IA_RPG_PWA_MEM__ = {});
 const DATA = {
@@ -28,7 +33,17 @@ const DATA = {
     ["Chat utilitário","https://www.youtube.com/results?search_query=chatbot+app+llm+tutorial"]
   ]
 };
+async function testConnection() {
+  const { data, error } = await supabase.from('progress').select('*')
 
+  if (error) {
+    console.log("Erro:", error)
+  } else {
+    console.log("Conectado 🎉", data)
+  }
+}
+
+testConnection()
 function storageAvailable(){
   try{ const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }
   catch(e){ return false; }
