@@ -44,6 +44,27 @@ async function testConnection() {
 }
 
 testConnection()
+
+async function saveToCloud(state) {
+  const { data, error } = await supabase
+    .from('progress')
+    .upsert({
+      user_id: 'user_teste',
+      base_state: state.base,
+      gen_state: state.gen,
+      projects_state: state.projects,
+      xp: state.xp,
+      notes: state.notes,
+      timeline: state.timeline,
+      updated_at: new Date()
+    })
+
+  if (error) {
+    console.log("Erro ao salvar:", error)
+  } else {
+    console.log("Salvo na nuvem ☁️", data)
+  }
+}
 function storageAvailable(){
   try{ const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }
   catch(e){ return false; }
@@ -85,6 +106,8 @@ function addTimeline(text){
   s.timeline = s.timeline.slice(0,12);
   s.lastActivity = todayStr();
   saveState(s);
+  saveToCloud(s);
+  refreshAll();
 }
 function toggleItem(group, i, checked, label){
   const s = ensureState();
