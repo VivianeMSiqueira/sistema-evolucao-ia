@@ -58,7 +58,14 @@ async function testConnection() {
 testConnection()
 
 async function saveToCloud(state) {
-  const userId = getOrCreateUserId();
+  const user = await getUser();
+
+  if (!user) {
+    console.log("Usuário não logado ainda");
+    return;
+  }
+
+  const userId = user.id;
 
   const payload = {
     user_id: userId,
@@ -80,6 +87,22 @@ async function saveToCloud(state) {
   } else {
     console.log("Salvo na nuvem ☁️", data);
   }
+}
+
+async function login(email) {
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email
+  });
+
+  if (error) {
+    console.log("Erro no login:", error);
+  } else {
+    console.log("Link mágico enviado ✨");
+  }
+}
+async function getUser() {
+  const { data } = await supabase.auth.getUser();
+  return data.user;
 }
 function storageAvailable(){
   try{ const k="__t"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return true; }
