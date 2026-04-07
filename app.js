@@ -123,8 +123,10 @@ async function login(email) {
 
   if (error) {
     console.log("Erro no login:", error);
+    return { ok: false, error };
   } else {
     console.log("Link mágico enviado ✨");
+    return { ok: true };
   }
 }
 async function getUser() {
@@ -166,6 +168,13 @@ function initAuthUI() {
 
   if (loginBtn && emailInput) {
     loginBtn.onclick = async () => {
+      const currentUser = await getUser();
+
+      if (currentUser) {
+        alert("Você já está logada como " + currentUser.email + " 😏");
+        return;
+      }
+
       const email = emailInput.value.trim();
 
       if (!email) {
@@ -173,8 +182,13 @@ function initAuthUI() {
         return;
       }
 
-      await login(email);
-      alert("Verifique seu email ✨");
+      const result = await login(email);
+
+      if (result.ok) {
+        alert("Verifique seu email ✨");
+      } else {
+        alert("Não foi possível enviar agora. Espere um pouco e tente de novo 💜");
+      }
     };
   }
 
