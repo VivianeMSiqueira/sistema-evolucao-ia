@@ -89,6 +89,30 @@ async function saveToCloud(state) {
   }
 }
 
+async function loadFromCloud() {
+  const user = await getUser();
+
+  if (!user) {
+    console.log("Usuário não logado ainda");
+    return null;
+  }
+
+  const userId = user.id;
+
+  const { data, error } = await supabase
+    .from('progress')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    console.log("Nada na nuvem ainda ou erro ao carregar:", error);
+    return null;
+  }
+
+  console.log("Carregado da nuvem ☁️", data);
+  return data;
+}
 async function login(email) {
   const { error } = await supabase.auth.signInWithOtp({
     email: email,
@@ -107,8 +131,10 @@ async function getUser() {
   const { data } = await supabase.auth.getUser();
   return data.user;
 }
+
 window.login = login;
 window.getUser = getUser;
+
 function storageAvailable() {
   try { const k = "__t"; localStorage.setItem(k, "1"); localStorage.removeItem(k); return true; }
   catch (e) { return false; }
