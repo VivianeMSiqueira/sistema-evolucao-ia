@@ -135,6 +135,58 @@ async function getUser() {
 window.login = login;
 window.getUser = getUser;
 
+async function logout() {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.log("Erro ao sair:", error);
+  } else {
+    console.log("Saiu 👋");
+    refreshAuthUI();
+  }
+}
+
+async function refreshAuthUI() {
+  const user = await getUser();
+  const status = document.getElementById("authStatus");
+
+  if (!status) return;
+
+  if (user) {
+    status.textContent = "Logada como: " + user.email;
+  } else {
+    status.textContent = "Não logada";
+  }
+}
+
+function initAuthUI() {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const emailInput = document.getElementById("emailInput");
+
+  if (loginBtn && emailInput) {
+    loginBtn.onclick = async () => {
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        alert("Digite seu e-mail primeiro 😏");
+        return;
+      }
+
+      await login(email);
+      alert("Verifique seu email ✨");
+    };
+  }
+
+  if (logoutBtn) {
+    logoutBtn.onclick = async () => {
+      await logout();
+    };
+  }
+
+  refreshAuthUI();
+}
+
 function storageAvailable() {
   try { const k = "__t"; localStorage.setItem(k, "1"); localStorage.removeItem(k); return true; }
   catch (e) { return false; }
@@ -345,6 +397,7 @@ function refreshAll() {
 document.getElementById("returnBtn").onclick = () => comebackBonus("return");
 document.getElementById("softDayBtn").onclick = () => comebackBonus("soft");
 refreshAll();
+initAuthUI();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => { }));
 }

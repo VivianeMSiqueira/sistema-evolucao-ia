@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IA RPG — Sistema de Evolução em IA</title>
   <meta name="theme-color" content="#8b5cf6">
-  <meta name="description" content="Sistema de evolução pessoal em IA com mentor adaptativo, progresso, projetos e plano automático.">
+  <meta name="description"
+    content="Sistema de evolução pessoal em IA com mentor adaptativo, progresso, projetos e plano automático.">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
     <div class="container">
@@ -19,6 +22,19 @@
     </div>
   </header>
 
+  <section class="card">
+    <h2>🔐 Conta</h2>
+
+    <div class="row">
+      <input id="emailInput" type="email" placeholder="seuemail@exemplo.com">
+      <button id="loginBtn" type="button">Entrar</button>
+      <button id="logoutBtn" type="button" class="secondary">Sair</button>
+    </div>
+
+    <div id="authStatus" class="muted top-gap">
+      Não logada
+    </div>
+  </section>
   <div class="container grid">
     <main>
       <section class="card">
@@ -29,17 +45,30 @@
       <section class="card">
         <h2>📊 Painel de Evolução</h2>
         <div class="row">
-          <div class="kpi"><div class="muted small">Nível</div><div id="levelText" class="big">1</div></div>
-          <div class="kpi"><div class="muted small">XP total</div><div id="xpText" class="big">0</div></div>
-          <div class="kpi"><div class="muted small">Energia da build</div><div id="buildText" class="big">🌱</div></div>
+          <div class="kpi">
+            <div class="muted small">Nível</div>
+            <div id="levelText" class="big">1</div>
+          </div>
+          <div class="kpi">
+            <div class="muted small">XP total</div>
+            <div id="xpText" class="big">0</div>
+          </div>
+          <div class="kpi">
+            <div class="muted small">Energia da build</div>
+            <div id="buildText" class="big">🌱</div>
+          </div>
         </div>
         <div class="progress-block">
           <div class="muted">XP para o próximo nível</div>
-          <div class="progress"><div id="xpBar" class="bar"></div></div>
+          <div class="progress">
+            <div id="xpBar" class="bar"></div>
+          </div>
         </div>
         <div class="progress-block">
           <div class="muted">Progresso global</div>
-          <div class="progress"><div id="globalBar" class="bar"></div></div>
+          <div class="progress">
+            <div id="globalBar" class="bar"></div>
+          </div>
         </div>
         <div id="dashboardLine" class="muted top-gap">Calculando seu caos produtivo...</div>
       </section>
@@ -112,11 +141,13 @@
 
       <section class="card">
         <h2>📲 Instalação</h2>
-        <div class="muted">No celular, abra o menu do navegador e use “Adicionar à tela inicial”. No desktop, alguns navegadores mostram um ícone de instalar na barra.</div>
+        <div class="muted">No celular, abra o menu do navegador e use “Adicionar à tela inicial”. No desktop, alguns
+          navegadores mostram um ícone de instalar na barra.</div>
       </section>
     </aside>
   </div>
 
   <script type="module" src="app.js"></script>
 </body>
+
 </html>
