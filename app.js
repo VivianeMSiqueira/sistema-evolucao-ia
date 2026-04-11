@@ -1,5 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
+let recommendedSource = "current"; // ou "edx"
 const supabaseUrl = 'https://hjzjogkuffbrutcyvnfs.supabase.co'
 const supabaseKey = 'sb_publishable_kwtsN8W5EoBTJCskzPfwvQ_QN6-Y2wV'
 
@@ -325,7 +325,7 @@ function renderChecklist(dataKey, elId) {
     chk.checked = !!s[dataKey][i];
     chk.onchange = () => toggleItem(dataKey, i, chk.checked, label);
     const text = document.createElement("div");
-    text.innerHTML = `<div>${label}</div> <div class="small"> <a class="btn secondary" href="${links.current}" target="_blank" rel="noopener">📚 Abrir conteúdo</a> ${links.edx ? `<a class="btn secondary" href="${links.edx}" target="_blank" rel="noopener">🎓 Ver no edX</a>` : ""} </div>`;
+    text.innerHTML = `<div>${label}</div> <div class="small"> <a class="btn ${recommendedSource === 'current' ? '' : 'secondary'}" href="${links.current}" target="_blank" rel="noopener"> 📚 Abrir conteúdo</a> ${links.edx ? `<a class="btn ${recommendedSource === 'edx' ? '' : 'secondary'}" href="${links.edx}" target="_blank" rel="noopener">🎓 Ver no edX</a>` : ""} </div>`;
     row.appendChild(chk); row.appendChild(text); box.appendChild(row);
   });
 }
@@ -342,7 +342,7 @@ function renderDashboard() {
   else if (c.global < 85) line.textContent = "Sua build está perigosa. Continue antes que Stanford te note.";
   else line.textContent = "Você já está em território de gente que constrói coisa séria.";
 }
-function renderMentor(){
+function renderMentor() {
   const s = ensureState();
   const c = compute();
 
@@ -357,32 +357,36 @@ function renderMentor(){
   let source = "";
   let good = false;
 
-  if (gap >= 5){
+  if (gap >= 5) {
     title = "💜 Reentrada estratégica";
     text = "Volta suave. Nada de heroísmo hoje.";
     source = "📚 Use conteúdo leve (YouTube / atual)";
+    recommendedSource = "current";
   }
 
-  else if (c.base < 50){
+  else if (c.base < 50) {
     title = "🧱 Fundamentos pedindo socorro";
     text = "Sua base ainda precisa de estrutura sólida.";
     source = "🎓 Vá de edX (aprendizado mais guiado)";
+    recommendedSource = "edx";
   }
 
-  else if (c.gen < 50){
+  else if (c.gen < 50) {
     title = "🤖 Hora de ganhar velocidade";
     text = "Agora você precisa praticar mais do que teorizar.";
     source = "📚 Use conteúdo direto e prático";
+    recommendedSource = "current";
   }
 
-  else if (c.proj < 34){
+  else if (c.proj < 34) {
     title = "🛠 Chega de teoria, constrói";
     text = "Sem projeto você não evolui de verdade.";
     source = "📚 Prática direta (sem edX agora)";
     good = true;
+    recommendedSource = "current";
   }
 
-  else if (c.global >= 85){
+  else if (c.global >= 85) {
     title = "👑 Modo especialista desbloqueado";
     text = "Agora você aguenta conteúdo pesado.";
     source = "🧠 Stanford / conteúdo avançado";
