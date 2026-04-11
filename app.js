@@ -28,10 +28,34 @@ const DATA = {
     ["Udemy GenAI", "https://www.udemy.com/course/formacao-engenheiro-de-ia-generativa-ia-na-pratica/"]
   ],
   base: [
-    ["IA vs ML vs Deep Learning", "https://cs50.harvard.edu/ai/"],
-    ["Vetores, matrizes e gradiente", "https://www.khanacademy.org/math/linear-algebra"],
-    ["Loss, overfitting e generalização", "https://www.youtube.com/results?search_query=overfitting+machine+learning"],
-    ["Treinar 1 modelo simples", "https://www.youtube.com/results?search_query=scikit-learn+classification+tutorial"]
+    [
+      "IA vs ML vs Deep Learning",
+      {
+        current: "https://cs50.harvard.edu/ai/",
+        edx: "https://www.edx.org/learn/artificial-intelligence"
+      }
+    ],
+    [
+      "Vetores, matrizes e gradiente",
+      {
+        current: "https://www.khanacademy.org/math/linear-algebra",
+        edx: "https://www.edx.org/learn/linear-algebra"
+      }
+    ],
+    [
+      "Loss, overfitting e generalização",
+      {
+        current: "https://www.youtube.com/results?search_query=overfitting+machine+learning",
+        edx: "https://www.edx.org/learn/machine-learning"
+      }
+    ],
+    [
+      "Treinar 1 modelo simples",
+      {
+        current: "https://www.youtube.com/results?search_query=scikit-learn+classification+tutorial",
+        edx: "https://www.edx.org/learn/python"
+      }
+    ]
   ],
   gen: [
     ["Transformers em alto nível", "https://www.youtube.com/results?search_query=transformers+explained"],
@@ -293,7 +317,7 @@ function renderChecklist(dataKey, elId) {
   const box = document.getElementById(elId);
   box.innerHTML = "";
   DATA[dataKey].forEach((item, i) => {
-    const [label, url] = item;
+    const [label, links] = item;
     const row = document.createElement("div");
     row.className = "quest";
     const chk = document.createElement("input");
@@ -301,7 +325,7 @@ function renderChecklist(dataKey, elId) {
     chk.checked = !!s[dataKey][i];
     chk.onchange = () => toggleItem(dataKey, i, chk.checked, label);
     const text = document.createElement("div");
-    text.innerHTML = '<div>' + label + '</div><div class="small"><a class="btn secondary" href="' + url + '" target="_blank" rel="noopener">📚 Abrir conteúdo</a></div>';
+    text.innerHTML = `<div>${label}</div> <div class="small"> <a class="btn secondary" href="${links.current}" target="_blank" rel="noopener">📚 Abrir conteúdo</a> ${links.edx ? `<a class="btn secondary" href="${links.edx}" target="_blank" rel="noopener">🎓 Ver no edX</a>` : ""} </div>`;
     row.appendChild(chk); row.appendChild(text); box.appendChild(row);
   });
 }
