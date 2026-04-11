@@ -342,20 +342,63 @@ function renderDashboard() {
   else if (c.global < 85) line.textContent = "Sua build está perigosa. Continue antes que Stanford te note.";
   else line.textContent = "Você já está em território de gente que constrói coisa séria.";
 }
-function renderMentor() {
-  const s = ensureState(), c = compute();
+function renderMentor(){
+  const s = ensureState();
+  const c = compute();
+
   const mentorTitle = document.getElementById("mentorTitle");
   const mentorText = document.getElementById("mentorText");
   const box = document.getElementById("mentorBox");
+
   let gap = s.lastActivity ? daysBetween(s.lastActivity, todayStr()) : 0;
-  let title = "", text = "", good = false;
-  if (gap >= 5) { title = "💜 Reentrada gentil"; text = "Você ficou alguns dias fora. Hoje a meta é reacender o motor com 1 tarefa leve."; }
-  else if (c.base < 50) { title = "🧱 Fundamento primeiro"; text = "Sua base ainda está pedindo atenção. Fecha 1 item da base hoje."; }
-  else if (c.gen < 50) { title = "🤖 Hora de brincar de IA generativa"; text = "Você já tem chão suficiente. Agora entra em transformers, embeddings ou mini app."; }
-  else if (c.proj < 34) { title = "🛠 Chega de teoria perfumada"; text = "Você precisa de pelo menos 1 projeto prático."; good = true; }
-  else if (c.global >= 85) { title = "👑 Modo construtora de IA"; text = "Agora o foco é mostrar, testar, iterar e explicar."; good = true; }
-  else { title = "⚙️ Consolidação inteligente"; text = "Misture base + generativa + projeto."; }
-  mentorTitle.textContent = title; mentorText.textContent = text; box.className = "alert" + (good ? " good" : "");
+
+  let title = "";
+  let text = "";
+  let source = "";
+  let good = false;
+
+  if (gap >= 5){
+    title = "💜 Reentrada estratégica";
+    text = "Volta suave. Nada de heroísmo hoje.";
+    source = "📚 Use conteúdo leve (YouTube / atual)";
+  }
+
+  else if (c.base < 50){
+    title = "🧱 Fundamentos pedindo socorro";
+    text = "Sua base ainda precisa de estrutura sólida.";
+    source = "🎓 Vá de edX (aprendizado mais guiado)";
+  }
+
+  else if (c.gen < 50){
+    title = "🤖 Hora de ganhar velocidade";
+    text = "Agora você precisa praticar mais do que teorizar.";
+    source = "📚 Use conteúdo direto e prático";
+  }
+
+  else if (c.proj < 34){
+    title = "🛠 Chega de teoria, constrói";
+    text = "Sem projeto você não evolui de verdade.";
+    source = "📚 Prática direta (sem edX agora)";
+    good = true;
+  }
+
+  else if (c.global >= 85){
+    title = "👑 Modo especialista desbloqueado";
+    text = "Agora você aguenta conteúdo pesado.";
+    source = "🧠 Stanford / conteúdo avançado";
+    good = true;
+  }
+
+  else {
+    title = "⚙️ Consolidação inteligente";
+    text = "Misture teoria e prática com estratégia.";
+    source = "🎓 edX + 📚 prática";
+  }
+
+  mentorTitle.textContent = title;
+  mentorText.innerHTML = text + "<br><br><strong>" + source + "</strong>";
+
+  box.className = "alert" + (good ? " good" : "");
 }
 function buildPlan() {
   const s = ensureState(), c = compute();
