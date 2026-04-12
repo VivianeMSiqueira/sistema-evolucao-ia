@@ -1,5 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 let recommendedSource = "current"; // ou "edx"
+let recommendedTask = { group: null, index: null };
 const supabaseUrl = 'https://hjzjogkuffbrutcyvnfs.supabase.co'
 const supabaseKey = 'sb_publishable_kwtsN8W5EoBTJCskzPfwvQ_QN6-Y2wV'
 
@@ -324,7 +325,11 @@ function renderChecklist(dataKey, elId) {
       : rawLinks;
 
     const row = document.createElement("div");
-    row.className = "quest";
+    const isRecommended =
+      recommendedTask.group === dataKey &&
+      recommendedTask.index === i;
+      
+    row.className = "quest" + (isRecommended ? " recommended" : "");
 
     const chk = document.createElement("input");
     chk.type = "checkbox";
@@ -382,6 +387,7 @@ function renderMentor() {
   let good = false;
 
   recommendedSource = "current"; // padrão seguro a cada render
+  recommendedTask = { group: null, index: null };
 
   if (gap >= 5) {
     title = "💜 Reentrada estratégica";
@@ -393,23 +399,43 @@ function renderMentor() {
     text = "Sua base ainda precisa de estrutura sólida.";
     source = "🎓 Vá de edX (aprendizado mais guiado)";
     recommendedSource = "edx";
+
+    recommendedTask = {
+      group: "base",
+      index: findNextTask("base")
+    };
   } else if (c.gen < 50) {
     title = "🤖 Hora de ganhar velocidade";
     text = "Agora você precisa praticar mais do que teorizar.";
     source = "📚 Use conteúdo direto e prático";
     recommendedSource = "current";
+
+    recommendedTask = {
+      group: "gen",
+      index: findNextTask("gen")
+    };
   } else if (c.proj < 34) {
     title = "🛠 Chega de teoria, constrói";
     text = "Sem projeto você não evolui de verdade.";
     source = "📚 Prática direta (sem edX agora)";
     good = true;
     recommendedSource = "current";
+
+    recommendedTask = {
+      group: "projects",
+      index: findNextTask("projects")
+    };
   } else if (c.global >= 85) {
     title = "👑 Modo especialista desbloqueado";
     text = "Agora você aguenta conteúdo pesado.";
     source = "🧠 Stanford / conteúdo avançado";
     good = true;
     recommendedSource = "current";
+
+    recommendedTask = {
+      group: "global",
+      index: findNextTask("global")
+    };
   } else {
     title = "⚙️ Consolidação inteligente";
     text = "Misture teoria e prática com estratégia.";
@@ -417,6 +443,14 @@ function renderMentor() {
     recommendedSource = "edx";
   }
 
+  function findNextTask(groupKey) {
+    const s = ensureState();
+    const arr = s[groupKey];
+    for (let i = 0; i < arr.length; i++) {
+       if (!arr[i]) return i;
+    }
+    return null;
+  }
   mentorTitle.textContent = title;
   mentorText.innerHTML = text + "<br><br><strong>" + source + "</strong>";
   box.className = "alert" + (good ? " good" : "");
