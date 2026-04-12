@@ -23,16 +23,24 @@
   </header>
 
   <section class="card">
-  <h2>🔐 Conta</h2>
+    <h2>🔐 Conta</h2>
 
-  <div class="row" id="authControls">
-    <input id="emailInput" type="email" placeholder="seuemail@exemplo.com">
-    <button id="loginBtn" type="button">Entrar</button>
-    <button id="logoutBtn" type="button" class="secondary">Sair</button>
-  </div>
+    <div id="accountHeader" class="row top-gap" style="align-items:center; display:none;">
+      <div id="avatarCircle" class="avatar-circle">V</div>
+      <div>
+        <div id="accountName" class="strong">Conta</div>
+        <div id="authStatus" class="muted">Não logada</div>
+      </div>
+    </div>
 
-  <div id="authStatus" class="muted top-gap">Não logada</div>
-</section>
+    <div class="row top-gap" id="authControls">
+      <input id="emailInput" type="email" placeholder="seuemail@exemplo.com">
+      <button id="loginBtn" type="button">Entrar</button>
+      <button id="logoutBtn" type="button" class="secondary">Sair</button>
+    </div>
+
+    <div id="authMessage" class="muted top-gap">Não logada</div>
+  </section>
   <div class="container grid">
     <main>
       <section class="card">

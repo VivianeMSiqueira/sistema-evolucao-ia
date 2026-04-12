@@ -188,20 +188,33 @@ async function logout() {
 
 async function refreshAuthUI() {
   const user = await getUser();
-  const status = document.getElementById("authStatus");
+
+  const authStatus = document.getElementById("authStatus");
+  const authMessage = document.getElementById("authMessage");
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const emailInput = document.getElementById("emailInput");
-
-  if (!status) return;
+  const accountHeader = document.getElementById("accountHeader");
+  const avatarCircle = document.getElementById("avatarCircle");
+  const accountName = document.getElementById("accountName");
 
   if (user) {
-    status.textContent = "Logada como: " + user.email;
+    if (authStatus) authStatus.textContent = user.email;
+    if (authMessage) authMessage.textContent = "Sessão ativa 😏";
+    if (accountHeader) accountHeader.style.display = "flex";
+    if (avatarCircle) avatarCircle.textContent = getInitialFromEmail(user.email);
+    if (accountName) accountName.textContent = "Conta conectada";
+
     if (loginBtn) loginBtn.style.display = "none";
     if (emailInput) emailInput.style.display = "none";
     if (logoutBtn) logoutBtn.style.display = "inline-block";
   } else {
-    status.textContent = "Não logada";
+    if (authStatus) authStatus.textContent = "Não logada";
+    if (authMessage) authMessage.textContent = "Não logada";
+    if (accountHeader) accountHeader.style.display = "none";
+    if (avatarCircle) avatarCircle.textContent = "?";
+    if (accountName) accountName.textContent = "Conta";
+
     if (loginBtn) loginBtn.style.display = "inline-block";
     if (emailInput) emailInput.style.display = "inline-block";
     if (logoutBtn) logoutBtn.style.display = "none";
@@ -345,7 +358,7 @@ function renderChecklist(dataKey, elId) {
     const isRecommended =
       recommendedTask.group === dataKey &&
       recommendedTask.index === i;
-      
+
     row.className = "quest" + (isRecommended ? " recommended" : "");
 
     const chk = document.createElement("input");
@@ -464,7 +477,7 @@ function renderMentor() {
     const s = ensureState();
     const arr = s[groupKey];
     for (let i = 0; i < arr.length; i++) {
-       if (!arr[i]) return i;
+      if (!arr[i]) return i;
     }
     return null;
   }
@@ -474,7 +487,7 @@ function renderMentor() {
 }
 
 function setAuthMessage(message) {
-  const status = document.getElementById("authStatus");
+  const status = document.getElementById("authMessage");
   if (status) status.textContent = message;
 }
 
@@ -486,6 +499,11 @@ function setAuthLoading(isLoading) {
   if (emailInput) emailInput.disabled = isLoading;
   if (loginBtn) loginBtn.disabled = isLoading;
   if (logoutBtn) logoutBtn.disabled = isLoading;
+}
+
+function getInitialFromEmail(email) {
+  if (!email) return "?";
+  return email.trim().charAt(0).toUpperCase();
 }
 
 function buildPlan() {
@@ -578,7 +596,7 @@ initAuthUI();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => { }));
 
-supabase.auth.onAuthStateChange((_event, _session) => {
-  refreshAuthUI();
-});
+  supabase.auth.onAuthStateChange((_event, _session) => {
+    refreshAuthUI();
+  });
 }
