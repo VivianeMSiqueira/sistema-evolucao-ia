@@ -139,6 +139,9 @@ async function loadFromCloud() {
   return data;
 }
 async function login(email) {
+  setAuthLoading(true);
+  setAuthMessage("Enviando link mágico... ✨");
+
   const { error } = await supabase.auth.signInWithOtp({
     email: email,
     options: {
@@ -146,11 +149,15 @@ async function login(email) {
     }
   });
 
+  setAuthLoading(false);
+
   if (error) {
     console.log("Erro no login:", error);
+    setAuthMessage("Não foi possível enviar agora. Tente novamente em instantes 💜");
     return { ok: false, error };
   } else {
     console.log("Link mágico enviado ✨");
+    setAuthMessage("Link enviado! Verifique seu email ✨");
     return { ok: true };
   }
 }
@@ -163,12 +170,18 @@ window.login = login;
 window.getUser = getUser;
 
 async function logout() {
+  setAuthLoading(true);
+
   const { error } = await supabase.auth.signOut();
+
+  setAuthLoading(false);
 
   if (error) {
     console.log("Erro ao sair:", error);
+    setAuthMessage("Erro ao sair. Tente novamente.");
   } else {
     console.log("Saiu 👋");
+    setAuthMessage("Você saiu da conta.");
     refreshAuthUI();
   }
 }
@@ -176,13 +189,22 @@ async function logout() {
 async function refreshAuthUI() {
   const user = await getUser();
   const status = document.getElementById("authStatus");
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const emailInput = document.getElementById("emailInput");
 
   if (!status) return;
 
   if (user) {
     status.textContent = "Logada como: " + user.email;
+    if (loginBtn) loginBtn.style.display = "none";
+    if (emailInput) emailInput.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-block";
   } else {
     status.textContent = "Não logada";
+    if (loginBtn) loginBtn.style.display = "inline-block";
+    if (emailInput) emailInput.style.display = "inline-block";
+    if (logoutBtn) logoutBtn.style.display = "none";
   }
 }
 
@@ -196,24 +218,19 @@ function initAuthUI() {
       const currentUser = await getUser();
 
       if (currentUser) {
-        alert("Você já está logada como " + currentUser.email + " 😏");
+        setAuthMessage("Você já está logada como " + currentUser.email + " 😏");
+        refreshAuthUI();
         return;
       }
 
       const email = emailInput.value.trim();
 
       if (!email) {
-        alert("Digite seu e-mail primeiro 😏");
+        setAuthMessage("Digite seu e-mail primeiro 😏");
         return;
       }
 
-      const result = await login(email);
-
-      if (result.ok) {
-        alert("Verifique seu email ✨");
-      } else {
-        alert("Não foi possível enviar agora. Espere um pouco e tente de novo 💜");
-      }
+      await login(email);
     };
   }
 
@@ -455,6 +472,22 @@ function renderMentor() {
   mentorText.innerHTML = text + "<br><br><strong>" + source + "</strong>";
   box.className = "alert" + (good ? " good" : "");
 }
+
+function setAuthMessage(message) {
+  const status = document.getElementById("authStatus");
+  if (status) status.textContent = message;
+}
+
+function setAuthLoading(isLoading) {
+  const emailInput = document.getElementById("emailInput");
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (emailInput) emailInput.disabled = isLoading;
+  if (loginBtn) loginBtn.disabled = isLoading;
+  if (logoutBtn) logoutBtn.disabled = isLoading;
+}
+
 function buildPlan() {
   const s = ensureState(), c = compute();
   const gap = s.lastActivity ? daysBetween(s.lastActivity, todayStr()) : 0;
@@ -544,4 +577,8 @@ refreshAll();
 initAuthUI();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => { }));
+
+supabase.auth.onAuthStateChange((_event, _session) => {
+  refreshAuthUI();
+});
 }

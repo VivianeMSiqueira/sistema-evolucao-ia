@@ -190,33 +190,39 @@ textarea {
     }
 }
 
-input[type="email"]{
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.1);
-  background:#0f172a;
-  color:var(--text);
-  min-width:260px;
+input[type="email"] {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, .1);
+    background: #0f172a;
+    color: var(--text);
+    min-width: 260px;
 }
 
-.btn.recommended{
-  border: 2px solid #22d3ee;
-  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.18), 0 0 18px rgba(34, 211, 238, 0.18);
-  transform: translateY(-1px);
+input[type="email"]:disabled,
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-.btn.recommended::after{
-  content: " ⭐ recomendado";
-  font-size: 12px;
+.btn.recommended {
+    border: 2px solid #22d3ee;
+    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.18), 0 0 18px rgba(34, 211, 238, 0.18);
+    transform: translateY(-1px);
 }
 
-.quest.recommended{
-  border: 2px solid #a78bfa;
-  box-shadow: 0 0 18px rgba(167, 139, 250, 0.25);
+.btn.recommended::after {
+    content: " ⭐ recomendado";
+    font-size: 12px;
 }
 
-.quest.recommended::after{
-  content: " ⭐ missão sugerida";
-  font-size: 12px;
-  margin-left: 8px;
+.quest.recommended {
+    border: 2px solid #a78bfa;
+    box-shadow: 0 0 18px rgba(167, 139, 250, 0.25);
+}
+
+.quest.recommended::after {
+    content: " ⭐ missão sugerida";
+    font-size: 12px;
+    margin-left: 8px;
 }
