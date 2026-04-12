@@ -316,17 +316,41 @@ function renderChecklist(dataKey, elId) {
   const s = ensureState();
   const box = document.getElementById(elId);
   box.innerHTML = "";
+
   DATA[dataKey].forEach((item, i) => {
-    const [label, links] = item;
+    const [label, rawLinks] = item;
+    const links = typeof rawLinks === "string"
+      ? { current: rawLinks, edx: null }
+      : rawLinks;
+
     const row = document.createElement("div");
     row.className = "quest";
+
     const chk = document.createElement("input");
     chk.type = "checkbox";
     chk.checked = !!s[dataKey][i];
     chk.onchange = () => toggleItem(dataKey, i, chk.checked, label);
+
     const text = document.createElement("div");
-    text.innerHTML = `<div>${label}</div> <div class="small"> <a class="btn ${recommendedSource === 'current' ? '' : 'secondary'}" href="${links.current}" target="_blank" rel="noopener"> 📚 Abrir conteúdo</a> ${links.edx ? `<a class="btn ${recommendedSource === 'edx' ? '' : 'secondary'}" href="${links.edx}" target="_blank" rel="noopener">🎓 Ver no edX</a>` : ""} </div>`;
-    row.appendChild(chk); row.appendChild(text); box.appendChild(row);
+    text.innerHTML = `
+      <div>${label}</div>
+      <div class="small">
+        <a class="btn ${recommendedSource === 'current' ? '' : 'secondary'}"
+           href="${links.current}" target="_blank" rel="noopener">
+           📚 Abrir conteúdo
+        </a>
+        ${links.edx ? `
+          <a class="btn ${recommendedSource === 'edx' ? '' : 'secondary'}"
+             href="${links.edx}" target="_blank" rel="noopener">
+             🎓 Ver no edX
+          </a>
+        ` : ""}
+      </div>
+    `;
+
+    row.appendChild(chk);
+    row.appendChild(text);
+    box.appendChild(row);
   });
 }
 function renderDashboard() {
@@ -476,8 +500,16 @@ function resetAll() {
   mem[STORAGE_KEY] = {}; refreshAll();
 }
 function refreshAll() {
-  renderQuickLinks(); renderChecklist("base", "baseBox"); renderChecklist("gen", "genBox"); renderChecklist("projects", "projBox");
-  renderDashboard(); renderMentor(); buildPlan(); renderPatterns(); renderTimeline(); initNotes();
+  renderQuickLinks();
+  renderDashboard();
+  renderMentor();      // 👈 decide primeiro
+  renderChecklist("base", "baseBox");
+  renderChecklist("gen", "genBox");
+  renderChecklist("projects", "projBox");
+  buildPlan();
+  renderPatterns();
+  renderTimeline();
+  initNotes();
 }
 document.getElementById("returnBtn").onclick = () => comebackBonus("return");
 document.getElementById("softDayBtn").onclick = () => comebackBonus("soft");
