@@ -335,12 +335,12 @@ function renderChecklist(dataKey, elId) {
     text.innerHTML = `
       <div>${label}</div>
       <div class="small">
-        <a class="btn ${recommendedSource === 'current' ? '' : 'secondary'}"
+        <a class="btn ${recommendedSource === 'current' ? 'recommended' : 'secondary'}"
            href="${links.current}" target="_blank" rel="noopener">
            📚 Abrir conteúdo
         </a>
         ${links.edx ? `
-          <a class="btn ${recommendedSource === 'edx' ? '' : 'secondary'}"
+          <a class="btn ${recommendedSource === 'edx' ? 'recommended' : 'secondary'}"
              href="${links.edx}" target="_blank" rel="noopener">
              🎓 Ver no edX
           </a>
@@ -381,51 +381,44 @@ function renderMentor() {
   let source = "";
   let good = false;
 
+  recommendedSource = "current"; // padrão seguro a cada render
+
   if (gap >= 5) {
     title = "💜 Reentrada estratégica";
     text = "Volta suave. Nada de heroísmo hoje.";
     source = "📚 Use conteúdo leve (YouTube / atual)";
     recommendedSource = "current";
-  }
-
-  else if (c.base < 50) {
+  } else if (c.base < 50) {
     title = "🧱 Fundamentos pedindo socorro";
     text = "Sua base ainda precisa de estrutura sólida.";
     source = "🎓 Vá de edX (aprendizado mais guiado)";
     recommendedSource = "edx";
-  }
-
-  else if (c.gen < 50) {
+  } else if (c.gen < 50) {
     title = "🤖 Hora de ganhar velocidade";
     text = "Agora você precisa praticar mais do que teorizar.";
     source = "📚 Use conteúdo direto e prático";
     recommendedSource = "current";
-  }
-
-  else if (c.proj < 34) {
+  } else if (c.proj < 34) {
     title = "🛠 Chega de teoria, constrói";
     text = "Sem projeto você não evolui de verdade.";
     source = "📚 Prática direta (sem edX agora)";
     good = true;
     recommendedSource = "current";
-  }
-
-  else if (c.global >= 85) {
+  } else if (c.global >= 85) {
     title = "👑 Modo especialista desbloqueado";
     text = "Agora você aguenta conteúdo pesado.";
     source = "🧠 Stanford / conteúdo avançado";
     good = true;
-  }
-
-  else {
+    recommendedSource = "current";
+  } else {
     title = "⚙️ Consolidação inteligente";
     text = "Misture teoria e prática com estratégia.";
     source = "🎓 edX + 📚 prática";
+    recommendedSource = "edx";
   }
 
   mentorTitle.textContent = title;
   mentorText.innerHTML = text + "<br><br><strong>" + source + "</strong>";
-
   box.className = "alert" + (good ? " good" : "");
 }
 function buildPlan() {
@@ -502,7 +495,7 @@ function resetAll() {
 function refreshAll() {
   renderQuickLinks();
   renderDashboard();
-  renderMentor();      // 👈 decide primeiro
+  renderMentor();
   renderChecklist("base", "baseBox");
   renderChecklist("gen", "genBox");
   renderChecklist("projects", "projBox");

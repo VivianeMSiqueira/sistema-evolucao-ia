@@ -198,3 +198,14 @@ input[type="email"]{
   color:var(--text);
   min-width:260px;
 }
+
+.btn.recommended{
+  border: 2px solid #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.18), 0 0 18px rgba(34, 211, 238, 0.18);
+  transform: translateY(-1px);
+}
+
+.btn.recommended::after{
+  content: " ⭐ recomendado";
+  font-size: 12px;
+}
