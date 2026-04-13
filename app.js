@@ -33,20 +33,6 @@ const DATA = {
       "IA vs ML vs Deep Learning",
       {
         current: "https://cs50.harvard.edu/ai/",
-        edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50-s-introduction-to-artificial-intelligence-with-python"
-      }
-    ],
-    [
-      "Vetores, matrizes e gradiente",
-      {
-        current: "https://www.khanacademy.org/math/linear-algebra",
-        edx: "https://www.edx.org/learn/linear-algebra"
-      }
-    ],
-    [
-      "IA vs ML vs Deep Learning",
-      {
-        current: "https://cs50.harvard.edu/ai/",
         edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50s-introduction-to-artificial-intelligence-with-python",
         focus: "Entender a diferença entre IA, ML e DL. NÃO aprofundar em código."
       }
