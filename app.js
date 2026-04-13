@@ -376,7 +376,7 @@ function renderChecklist(dataKey, elId) {
       <div class="small">
         <a class="btn ${recommendedSource === 'current' ? 'recommended' : 'secondary'}"
            href="${links.current}" target="_blank" rel="noopener">
-           📚 Abrir conteúdo
+           ${getLabelForLink(links.current)}
         </a>
         ${links.edx ? `
           <a class="btn ${recommendedSource === 'edx' ? 'recommended' : 'secondary'}"
@@ -409,6 +409,17 @@ function renderDashboard() {
   else if (c.global < 60) line.textContent = "Agora você já consegue causar dano real em problemas pequenos.";
   else if (c.global < 85) line.textContent = "Sua build está perigosa. Continue antes que Stanford te note.";
   else line.textContent = "Você já está em território de gente que constrói coisa séria.";
+}
+
+function getLabelForLink(url) {
+  if (!url) return "📚 Abrir conteúdo";
+
+  if (url.includes("khanacademy")) return "📐 Estudar no Khan";
+  if (url.includes("youtube")) return "▶️ Ver explicação";
+  if (url.includes("cs50")) return "🧠 Abrir CS50";
+  if (url.includes("edx")) return "🎓 Abrir no edX";
+
+  return "📚 Abrir conteúdo";
 }
 function renderMentor() {
   const s = ensureState();
