@@ -33,7 +33,7 @@ const DATA = {
       "IA vs ML vs Deep Learning",
       {
         current: "https://cs50.harvard.edu/ai/",
-        edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50s-introduction-to-artificial-intelligence-with-python"
+        edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50-s-introduction-to-artificial-intelligence-with-python"
       }
     ],
     [
@@ -44,17 +44,35 @@ const DATA = {
       }
     ],
     [
+      "IA vs ML vs Deep Learning",
+      {
+        current: "https://cs50.harvard.edu/ai/",
+        edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50s-introduction-to-artificial-intelligence-with-python",
+        focus: "Entender a diferença entre IA, ML e DL. NÃO aprofundar em código."
+      }
+    ],
+    [
+      "Vetores, matrizes e gradiente",
+      {
+        current: "https://www.khanacademy.org/math/linear-algebra",
+        edx: "https://www.edx.org/learn/linear-algebra",
+        focus: "Entender vetores e operações básicas. NÃO entrar em matemática pesada."
+      }
+    ],
+    [
       "Loss, overfitting e generalização",
       {
         current: "https://www.youtube.com/results?search_query=overfitting+machine+learning",
-        edx: "https://www.edx.org/learn/machine-learning"
+        edx: "https://www.edx.org/learn/machine-learning",
+        focus: "Entender o conceito de erro e overfitting. NÃO tentar dominar ML inteiro."
       }
     ],
     [
       "Treinar 1 modelo simples",
       {
         current: "https://www.youtube.com/results?search_query=scikit-learn+classification+tutorial",
-        edx: "https://www.edx.org/learn/python"
+        edx: "https://www.edx.org/learn/python",
+        focus: "Treinar algo simples funcionando. NÃO otimizar ou complicar."
       }
     ]
   ],
@@ -381,8 +399,13 @@ function renderChecklist(dataKey, elId) {
           </a>
         ` : ""}
       </div>
+      ${links.focus ? `
+        <div class="focus-box">
+          🎯 ${links.focus}
+        </div>
+      `: ""}
     `;
-
+      
     row.appendChild(chk);
     row.appendChild(text);
     box.appendChild(row);

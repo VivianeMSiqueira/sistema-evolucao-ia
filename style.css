@@ -241,3 +241,13 @@ button:disabled {
     color: var(--text);
     box-shadow: 0 0 18px rgba(139, 92, 246, .16);
 }
+
+.focus-box{
+  margin-top:6px;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:12px;
+  background:rgba(34,211,238,0.08);
+  border:1px solid rgba(34,211,238,0.15);
+  color:#a5f3fc;
+}
