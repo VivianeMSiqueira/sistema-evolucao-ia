@@ -33,7 +33,7 @@ const DATA = {
       "IA vs ML vs Deep Learning",
       {
         current: "https://cs50.harvard.edu/ai/",
-        edx: "https://www.edx.org/learn/artificial-intelligence"
+        edx: "https://www.edx.org/learn/artificial-intelligence/harvard-university-cs50s-introduction-to-artificial-intelligence-with-python"
       }
     ],
     [
