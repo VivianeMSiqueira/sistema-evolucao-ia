@@ -156,8 +156,13 @@ async function login(email) {
   setAuthLoading(false);
 
   if (error) {
-    console.log("Erro no login:", error);
-    setAuthMessage("Não foi possível enviar agora. Tente novamente em instantes 💜");
+    console.error("Erro completo:", error);
+
+    setAuthMessage(
+      "Erro: " +
+      (error.message || JSON.stringify(error))
+    );
+
     return { ok: false, error };
   } else {
     console.log("Link mágico enviado ✨");
